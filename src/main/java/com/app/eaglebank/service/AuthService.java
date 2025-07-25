@@ -36,10 +36,10 @@ public class AuthService {
         return user;
     }
 
-    public User register(User user) {
-        // encode password before saving
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
+//    public User register(User user) {
+//        // encode password before saving
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        return userRepository.save(user);
+//    }
 
 }
