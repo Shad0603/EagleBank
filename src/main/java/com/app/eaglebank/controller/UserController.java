@@ -40,17 +40,31 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable Long userId, Authentication authentication) {
-        User targetUser = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        User authUser = userService.getAuthenticatedUser(authentication);
+        User targetUser = userService.getUserById(userId);
 
-        User authUser = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authenticated user not found"));
+        userService.checkOwnership(authUser, targetUser);
+        return ResponseEntity.ok(targetUser);
+    }
 
-        if (!authUser.getId().equals(targetUser.getId())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to access this user's details");
+    @PatchMapping("/{userId}")
+    public ResponseEntity<?> updateUser(
+            @PathVariable Long userId,
+            @RequestBody User updatedUser,
+            Authentication authentication
+    ) {
+
+        if (updatedUser.getName() == null && updatedUser.getPassword() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one field must be provided for update");
         }
 
-        return ResponseEntity.ok(targetUser);
+        User authUser = userService.getAuthenticatedUser(authentication);
+        User targetUser = userService.getUserById(userId);
+
+        userService.checkOwnership(authUser, targetUser);
+        User savedUser = userService.updateUser(targetUser, updatedUser);
+
+        return ResponseEntity.ok(savedUser);
     }
 
 
