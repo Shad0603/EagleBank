@@ -18,6 +18,7 @@ public class User {
     private String email;
     private String name;
 
+    // Enforce that password cant be null
     @Column(nullable = false)
     private String password;
 

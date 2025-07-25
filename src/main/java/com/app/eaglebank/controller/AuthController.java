@@ -28,4 +28,12 @@ public class AuthController {
         String token = jwtService.generateToken(user);
         return new AuthResponse(token);
     }
+
+    @PostMapping("/register")
+    public AuthResponse register(@RequestBody User user) {
+        User savedUser = authService.register(user);
+        String token = jwtService.generateToken(savedUser);
+        return new AuthResponse(token);
+    }
+
 }
