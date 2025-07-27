@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/users")
@@ -35,11 +36,12 @@ public class UserController {
 
     @GetMapping
     public List<User> getAllUsers() {
+
         return userService.getAllUsers();
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable Long userId, Authentication authentication) {
+    public ResponseEntity<User> getUserById(@PathVariable UUID userId, Authentication authentication) {
         User authUser = userService.getAuthenticatedUser(authentication);
         User targetUser = userService.getUserById(userId);
 
@@ -49,7 +51,7 @@ public class UserController {
 
     @PatchMapping("/{userId}")
     public ResponseEntity<?> updateUser(
-            @PathVariable Long userId,
+            @PathVariable UUID userId,
             @RequestBody User updatedUser,
             Authentication authentication
     ) {

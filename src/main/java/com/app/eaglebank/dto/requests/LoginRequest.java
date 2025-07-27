@@ -1,4 +1,4 @@
-package com.app.eaglebank.dto;
+package com.app.eaglebank.dto.requests;
 
 public class LoginRequest {
     private String email;

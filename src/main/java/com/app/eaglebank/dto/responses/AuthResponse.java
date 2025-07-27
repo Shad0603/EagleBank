@@ -1,4 +1,4 @@
-package com.app.eaglebank.dto;
+package com.app.eaglebank.dto.responses;
 
 public class AuthResponse {
     private String token;

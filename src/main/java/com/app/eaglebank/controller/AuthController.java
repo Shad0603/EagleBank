@@ -1,7 +1,7 @@
 package com.app.eaglebank.controller;
 
-import com.app.eaglebank.dto.AuthRequest;
-import com.app.eaglebank.dto.AuthResponse;
+import com.app.eaglebank.dto.requests.AuthRequest;
+import com.app.eaglebank.dto.responses.AuthResponse;
 import com.app.eaglebank.model.User;
 import com.app.eaglebank.service.AuthService;
 import com.app.eaglebank.service.JwtService;
