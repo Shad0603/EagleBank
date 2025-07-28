@@ -29,12 +29,10 @@ import java.util.List;
 public class AccountController {
 
     private final AccountService accountService;
-    private final UserRepository userRepository;
     private final AccountMapper accountMapper;
 
-    public AccountController(AccountService accountService, UserRepository userRepository, AccountMapper accountMapper) {
+    public AccountController(AccountService accountService, AccountMapper accountMapper) {
         this.accountService = accountService;
-        this.userRepository = userRepository;
         this.accountMapper = accountMapper;
     }
 

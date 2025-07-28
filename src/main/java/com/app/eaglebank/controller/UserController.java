@@ -29,14 +29,10 @@ import java.util.UUID;
 @RequestMapping("/v1/users")
 public class UserController {
 
-    private final UserRepository userRepository;
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserRepository userRepository, UserService userService, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping
@@ -53,13 +49,15 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable UUID userId, Authentication authentication) {
+    public ResponseEntity<User> getUserById(
+            @PathVariable UUID userId,
+            @AuthenticationPrincipal User authenticatedUser
+    ) {
         // Get authenticated user for ownership check
-        User authUser = userService.getAuthenticatedUser(authentication);
         User targetUser = userService.getUserById(userId);
 
         // Ensure user can only access their own profile
-        userService.checkOwnership(authUser, targetUser);
+        userService.checkOwnership(authenticatedUser, targetUser);
         return ResponseEntity.ok(targetUser);
     }
 
@@ -67,7 +65,7 @@ public class UserController {
     public ResponseEntity<?> updateUser(
             @PathVariable UUID userId,
             @RequestBody User updatedUser,
-            Authentication authentication
+            @AuthenticationPrincipal User authenticatedUser
     ) {
         // Validate at least one field is provided for update
         if (updatedUser.getName() == null && updatedUser.getPassword() == null) {
@@ -75,11 +73,10 @@ public class UserController {
         }
 
         // Get users and verify ownership
-        User authUser = userService.getAuthenticatedUser(authentication);
         User targetUser = userService.getUserById(userId);
 
         // Prevent users from updating other profiles
-        userService.checkOwnership(authUser, targetUser);
+        userService.checkOwnership(authenticatedUser, targetUser);
 
         // Apply partial updates and save
         User savedUser = userService.updateUser(targetUser, updatedUser);
