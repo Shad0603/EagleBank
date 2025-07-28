@@ -1,8 +1,8 @@
-# EagleBank API
+# 🦅 🏦 EagleBank API
 
 A secure and robust RESTful API for banking operations, allowing users to manage accounts and perform financial transactions.
 
-## Features
+## ✨ Features
 
 - **User Management**: Register, retrieve, update, and delete user profiles
 - **Account Management**: Create and manage bank accounts with proper validation
@@ -11,7 +11,7 @@ A secure and robust RESTful API for banking operations, allowing users to manage
 - **Data Validation**: Comprehensive input validation for all API operations
 - **Error Handling**: Detailed error responses with appropriate HTTP status codes
 
-## Technologies Used
+## 🛠️ Technologies Used
 
 - **Java 17**
 - **Spring Boot**: Core framework for building the application
@@ -23,7 +23,7 @@ A secure and robust RESTful API for banking operations, allowing users to manage
 - **JUnit & Mockito**: Testing framework
 - **OpenAPI/Swagger**: API documentation
 
-## Project Structure
+## 📂 Project Structure
 
 The project follows a standard Spring Boot architecture:
 
@@ -54,7 +54,7 @@ src/
                     └── service/        # Service tests
 ```
 
-## Setup and Installation
+## 🚀 Setup and Installation
 
 ### Prerequisites
 
@@ -84,7 +84,56 @@ src/
 
 The application will start on `http://localhost:8080` by default.
 
-## API Documentation
+### Docker Container Setup
+
+The application can also be run using Docker containers, which simplifies setup and ensures consistency across environments.
+
+#### Prerequisites
+
+- Docker Engine 20.10.0 or higher
+- Docker Compose 2.0.0 or higher
+
+#### Running with Docker Compose
+
+1. Clone the repository
+2. Navigate to the project directory
+3. Start the application and database:
+   ```
+   docker-compose up -d
+   ```
+   This will:
+   - Build the application container
+   - Start a PostgreSQL database container
+   - Configure all necessary environment variables
+   - Link the application to the database
+   - Expose the application on port 8080
+
+4. To stop the containers:
+   ```
+   docker-compose down
+   ```
+
+5. To stop the containers and remove volumes (will delete database data):
+   ```
+   docker-compose down -v
+   ```
+
+#### Environment Variables
+
+The Docker setup uses the following environment variables (defined in docker-compose.yml):
+
+- Database configuration:
+  - `POSTGRES_DB`: Database name (default: eaglebank)
+  - `POSTGRES_USER`: Database username (default: eaglebank_user)
+  - `POSTGRES_PASSWORD`: Database password (default: eaglebank_password)
+
+- Application configuration:
+  - `SPRING_DATASOURCE_URL`: JDBC URL for database connection
+  - `SPRING_DATASOURCE_USERNAME`: Database username
+  - `SPRING_DATASOURCE_PASSWORD`: Database password
+  - `SECRET_KEY`: JWT secret key (should be changed in production)
+
+## 📚 API Documentation
 
 The API is documented using OpenAPI specification. The full specification can be found in the `openapi/openapi.yaml` file.
 
@@ -95,7 +144,7 @@ The API is documented using OpenAPI specification. The full specification can be
 - **Accounts**: `/v1/accounts`
 - **Transactions**: `/v1/accounts/{accountNumber}/transactions`
 
-## Usage Examples
+## 💻 Usage Examples
 
 ### Authentication
 
@@ -154,7 +203,7 @@ curl -X POST http://localhost:8080/v1/accounts/01234567/transactions \
   }'
 ```
 
-## Testing
+## 🧪 Testing
 
 The project includes unit tests for the service layer. To run the tests:
 
@@ -167,7 +216,7 @@ Key test classes:
 - `AccountServiceTest`: Tests for account management operations
 - `TransactionServiceTest`: Tests for transaction processing
 
-## Security Considerations
+## 🔒 Security Considerations
 
 - All endpoints (except user registration and login) require authentication
 - Users can only access and modify their own resources
@@ -175,6 +224,16 @@ Key test classes:
 - JWT tokens are used for stateless authentication
 - Input validation is performed on all requests
 
-## License
+## 🔮 Future Work
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+The following features are planned for future implementation:
+
+- [ ]  **PATCH** **`/v1/accounts/{accountNumber}`** – Update own account details
+- [ ]  **DELETE** **`/v1/accounts/{accountNumber}`** – Delete own account
+- [ ]  **GET** **`/v1/accounts/{accountId}/transactions`** – List all transactions for account
+- [ ]  **GET** **`/v1/accounts/{accountId}/transactions/{transactionId}`** – Fetch specific transaction
+
+Additional improvements:
+- Comprehensive controller tests to ensure API contract compliance
+- Integration tests for end-to-end validation
+- Performance testing for high-load scenarios

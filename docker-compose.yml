@@ -1,0 +1,56 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15
+    container_name: eaglebank-db
+    environment:
+      POSTGRES_DB: eaglebank
+      POSTGRES_USER: eaglebank_user
+      POSTGRES_PASSWORD: eaglebank_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - eaglebank-network
+
+  # Spring Boot Application
+  app:
+    build: .
+    container_name: eaglebank-app
+    environment:
+      # Database connection
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/eaglebank
+      SPRING_DATASOURCE_USERNAME: eaglebank_user
+      SPRING_DATASOURCE_PASSWORD: eaglebank_password
+
+      # JPA/Hibernate settings
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_JPA_SHOW_SQL: true
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+
+      # JWT Secret (change this!)
+      SECRET_KEY: d7cfcd0602e6d0cb70356a70c3aa3caf0ad2b5fa559ff6b402cc8044b3821342
+
+      # Server settings
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - eaglebank-network
+    # Wait for database to be ready
+    restart: on-failure
+
+# Define networks
+networks:
+  eaglebank-network:
+    driver: bridge
+
+# Define volumes for data persistence
+volumes:
+  postgres_data:
