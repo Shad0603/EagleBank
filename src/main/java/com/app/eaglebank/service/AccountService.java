@@ -1,6 +1,8 @@
 package com.app.eaglebank.service;
 
 import com.app.eaglebank.dto.requests.CreateAccountRequest;
+import com.app.eaglebank.dto.responses.AccountResponse;
+import com.app.eaglebank.exception.ResourceNotFoundException;
 import com.app.eaglebank.model.Account;
 import com.app.eaglebank.model.User;
 import com.app.eaglebank.repository.AccountRepository;
@@ -12,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class AccountService {
@@ -51,5 +54,15 @@ public class AccountService {
         return accountRepository.findByUser(user);
     }
 
+    public Account getUserAccountByAccountNumber(String accountNumber, User user) {
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
+
+        if (!account.getUser().getId().equals(user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to access this user's account details");
+        }
+
+        return account;
+    }
 }
 
