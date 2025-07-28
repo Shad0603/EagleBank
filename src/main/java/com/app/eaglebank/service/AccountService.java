@@ -1,7 +1,6 @@
 package com.app.eaglebank.service;
 
 import com.app.eaglebank.dto.requests.CreateAccountRequest;
-import com.app.eaglebank.dto.responses.AccountResponse;
 import com.app.eaglebank.exception.ResourceNotFoundException;
 import com.app.eaglebank.model.Account;
 import com.app.eaglebank.model.User;
@@ -14,7 +13,20 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
+
+/**
+ * Service class responsible for managing bank account operations in the Eagle Bank application.
+ *
+ * This service handles account creation, retrieval, and validation operations while ensuring
+ * proper user authorization and data integrity. It integrates with the Account and User
+ * repositories to perform CRUD operations and implements business logic for account management.
+ *
+ * Key responsibilities:
+ * - Creating new bank accounts with auto-generated account numbers
+ * - Retrieving user-specific accounts with proper authorization checks
+ * - Validating account ownership and access permissions
+ * - Generating unique account numbers with standardized format
+ */
 
 @Service
 public class AccountService {
@@ -28,7 +40,7 @@ public class AccountService {
     }
 
     public Account createAccount(CreateAccountRequest request, User user) {
-
+        // Initialize new account entity
         Account account = new Account();
         account.setName(request.getName());
         account.setAccountType(request.getAccountType());
@@ -48,18 +60,27 @@ public class AccountService {
     }
 
     public List<Account> getAccountsByUserEmail(String email) {
+        // Find user by email or throw unauthorized exception
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authenticated user not found"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED,
+                        "Authenticated user not found"
+                ));
 
+        // Return all accounts for the authenticated user
         return accountRepository.findByUser(user);
     }
 
     public Account getUserAccountByAccountNumber(String accountNumber, User user) {
+        // Find account by number or throw not found exception
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
 
+        // Verify account ownership to prevent unauthorized access
         if (!account.getUser().getId().equals(user.getId())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to access this user's account details");
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "You are not authorized to access this user's account details");
         }
 
         return account;

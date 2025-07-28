@@ -10,6 +10,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * REST controller for handling authentication operations in the Eagle Bank application.
+ *
+ * Provides endpoints for user login and JWT token generation. Handles credential validation
+ * and returns secure JWT tokens for authenticated sessions, enabling stateless authentication
+ * for subsequent API requests.
+ */
+
 @RestController
 @RequestMapping("/v1/auth")
 public class AuthController {
@@ -24,8 +32,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest request) {
+        // Authenticate user with email and password
         User user = authService.authenticate(request.getEmail(), request.getPassword());
+
+        // Generate JWT token for authenticated user
         String token = jwtService.generateToken(user);
+
+        // Return token in response
         return new AuthResponse(token);
     }
 

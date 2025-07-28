@@ -9,6 +9,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+/**
+ * Service class responsible for JWT token management in the Eagle Bank application.
+ *
+ * Handles JWT token generation, validation, and claims extraction for user authentication.
+ * Integrates with Spring Security to provide stateless authentication using signed tokens
+ * with configurable expiration times and secure signature validation.
+ */
+
 @Service
 public class JwtService {
 

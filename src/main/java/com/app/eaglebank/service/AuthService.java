@@ -5,6 +5,14 @@ import com.app.eaglebank.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class responsible for user authentication operations in the Eagle Bank application.
+ *
+ * Handles secure user authentication using email and password credentials with proper
+ * password hashing verification. Implements security best practices by providing generic
+ * error messages to prevent user enumeration attacks.
+ */
+
 @Service
 public class AuthService {
 
@@ -14,7 +22,6 @@ public class AuthService {
     // Used to hash and verify passwords securely
     private final PasswordEncoder passwordEncoder;
 
-    // Constructor injection of dependencies for better testability and immutability
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -35,11 +42,5 @@ public class AuthService {
         // Return the authenticated user object (can be used to generate a JWT)
         return user;
     }
-
-//    public User register(User user) {
-//        // encode password before saving
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        return userRepository.save(user);
-//    }
 
 }

@@ -15,7 +15,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+
+/**
+ * REST controller for managing bank account operations in the Eagle Bank application.
+ *
+ * Provides endpoints for account creation, retrieval, and management with proper authentication
+ * and authorization. All endpoints require user authentication and enforce account ownership
+ * validation to ensure users can only access their own account data.
+ */
 
 @RestController
 @RequestMapping("/v1/accounts")
@@ -36,9 +43,10 @@ public class AccountController {
             @Valid @RequestBody CreateAccountRequest request,
             @AuthenticationPrincipal User user
     ) {
-        // Save the new account
+        // Create new account for authenticated user
         Account account = accountService.createAccount(request, user);
 
+        // Return created account with 201 status
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new AccountResponse(account));
@@ -48,8 +56,13 @@ public class AccountController {
     public ResponseEntity<List<AccountResponse>> getAllAccounts(
             @AuthenticationPrincipal UserDetails userDetails) {
 
+        // Extract email from authenticated user
         String email = userDetails.getUsername();
+
+        // Get all accounts belonging to the user
         List<Account> accounts = accountService.getAccountsByUserEmail(email);
+
+        // Convert to response DTOs
         List<AccountResponse> response = accounts.stream()
                 .map(AccountResponse::new)
                 .toList();
@@ -62,12 +75,12 @@ public class AccountController {
             @PathVariable String accountNumber,
             @AuthenticationPrincipal User authenticatedUser) {
 
+        // Fetch account with ownership validation
         Account account = accountService.getUserAccountByAccountNumber(accountNumber, authenticatedUser);
 
+        // Map to response DTO and return
         AccountResponse response = accountMapper.toResponse(account);
         return ResponseEntity.ok(response);
     }
-
-
 
 }

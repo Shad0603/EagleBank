@@ -16,6 +16,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * REST controller for managing user operations in the Eagle Bank application.
+ *
+ * Provides endpoints for user registration, profile management, and account deletion
+ * with proper authentication and authorization. Enforces ownership validation to ensure
+ * users can only access and modify their own profile data, with special handling for
+ * account-dependent user deletion to maintain data integrity.
+ */
+
 @RestController
 @RequestMapping("/v1/users")
 public class UserController {
@@ -32,21 +41,24 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
+        // Register new user with password hashing
         User savedUser = userService.registerUser(user);
         return ResponseEntity.ok(savedUser);
     }
 
     @GetMapping
     public List<User> getAllUsers() {
-
+        // Admin endpoint to retrieve all users
         return userService.getAllUsers();
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable UUID userId, Authentication authentication) {
+        // Get authenticated user for ownership check
         User authUser = userService.getAuthenticatedUser(authentication);
         User targetUser = userService.getUserById(userId);
 
+        // Ensure user can only access their own profile
         userService.checkOwnership(authUser, targetUser);
         return ResponseEntity.ok(targetUser);
     }
@@ -57,15 +69,19 @@ public class UserController {
             @RequestBody User updatedUser,
             Authentication authentication
     ) {
-
+        // Validate at least one field is provided for update
         if (updatedUser.getName() == null && updatedUser.getPassword() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one field must be provided for update");
         }
 
+        // Get users and verify ownership
         User authUser = userService.getAuthenticatedUser(authentication);
         User targetUser = userService.getUserById(userId);
 
+        // Prevent users from updating other profiles
         userService.checkOwnership(authUser, targetUser);
+
+        // Apply partial updates and save
         User savedUser = userService.updateUser(targetUser, updatedUser);
 
         return ResponseEntity.ok(savedUser);
@@ -76,19 +92,17 @@ public class UserController {
             @PathVariable UUID userId,
             @AuthenticationPrincipal User authenticatedUser
     ) {
-        // 403 Authenticated user tries to delete someone else
+        // Prevent users from deleting other accounts
         if (!authenticatedUser.getId().equals(userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(Map.of("status", 403, "error", "You are not authorized to delete this user"));
         }
 
-        // 404 if user doesn't exist
-        // 409 if user has bank accounts
+        // Delete user only if no bank accounts exist (maintains data integrity)
         userService.deleteUserIfNoAccounts(userId);
 
-        // 204 No Content — user deleted
+        // Return 204 No Content on successful deletion
         return ResponseEntity.noContent().build();
     }
-
 
 }
