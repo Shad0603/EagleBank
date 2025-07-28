@@ -7,11 +7,13 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -67,6 +69,25 @@ public class UserController {
         User savedUser = userService.updateUser(targetUser, updatedUser);
 
         return ResponseEntity.ok(savedUser);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(
+            @PathVariable UUID userId,
+            @AuthenticationPrincipal User authenticatedUser
+    ) {
+        // 403 Authenticated user tries to delete someone else
+        if (!authenticatedUser.getId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("status", 403, "error", "You are not authorized to delete this user"));
+        }
+
+        // 404 if user doesn't exist
+        // 409 if user has bank accounts
+        userService.deleteUserIfNoAccounts(userId);
+
+        // 204 No Content — user deleted
+        return ResponseEntity.noContent().build();
     }
 
 

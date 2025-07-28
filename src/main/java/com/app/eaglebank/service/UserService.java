@@ -1,7 +1,10 @@
 package com.app.eaglebank.service;
 
+import com.app.eaglebank.exception.ResourceNotFoundException;
 import com.app.eaglebank.model.User;
+import com.app.eaglebank.repository.AccountRepository;
 import com.app.eaglebank.repository.UserRepository;
+import com.app.eaglebank.exception.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,11 +19,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AccountRepository accountRepository;
 
     public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder, AccountRepository accountRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.accountRepository = accountRepository;
     }
 
     public User registerUser(User user) {
@@ -61,5 +66,17 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public void deleteUserIfNoAccounts(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        boolean hasAccounts = accountRepository.existsByUser(user);
+        if (hasAccounts) {
+            throw new BadRequestException("Cannot delete user with existing bank accounts");
+        }
+
+        userRepository.delete(user);
     }
 }
