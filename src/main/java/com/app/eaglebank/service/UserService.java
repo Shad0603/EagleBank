@@ -6,7 +6,6 @@ import com.app.eaglebank.repository.AccountRepository;
 import com.app.eaglebank.repository.UserRepository;
 import com.app.eaglebank.exception.BadRequestException;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -41,12 +40,6 @@ public class UserService {
         // Hash the password before saving for security
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
-    }
-
-    public User getAuthenticatedUser(Authentication authentication) {
-        // Extract user from Spring Security authentication context
-        return userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authenticated user not found"));
     }
 
     public User getUserById(UUID userId) {
