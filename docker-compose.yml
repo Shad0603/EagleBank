@@ -1,6 +1,4 @@
 # docker-compose.yml
-version: '3.8'
-
 services:
   # PostgreSQL Database
   db:
@@ -24,7 +22,7 @@ services:
     environment:
       # Database connection
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/EagleBank
-      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_USERNAME: shad
       SPRING_DATASOURCE_PASSWORD: postgres
 
       # JPA/Hibernate settings
