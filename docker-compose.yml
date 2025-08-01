@@ -7,9 +7,9 @@ services:
     image: postgres:15
     container_name: eaglebank-db
     environment:
-      POSTGRES_DB: eaglebank
-      POSTGRES_USER: eaglebank_user
-      POSTGRES_PASSWORD: eaglebank_password
+      POSTGRES_DB: EagleBank
+      POSTGRES_USER: shad
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
@@ -23,9 +23,9 @@ services:
     container_name: eaglebank-app
     environment:
       # Database connection
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/eaglebank
-      SPRING_DATASOURCE_USERNAME: eaglebank_user
-      SPRING_DATASOURCE_PASSWORD: eaglebank_password
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/EagleBank
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
 
       # JPA/Hibernate settings
       SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
