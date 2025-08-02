@@ -1,5 +1,5 @@
 # Dockerfile
-FROM openjdk:17-jdk-alpine
+FROM eclipse-temurin:17-jdk-jammy
 
 # Set working directory
 WORKDIR /app
@@ -13,7 +13,7 @@ COPY pom.xml .
 RUN ./mvnw dependency:go-offline -B
 
 # Copy source code
-COPY src src
+COPY src ./src
 
 # Build the application
 RUN ./mvnw clean package -DskipTests
@@ -22,4 +22,4 @@ RUN ./mvnw clean package -DskipTests
 EXPOSE 8080
 
 # Run the application
-CMD ["java", "-jar", "target/eaglebank-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/EagleBank-0.0.1-SNAPSHOT.jar"]
