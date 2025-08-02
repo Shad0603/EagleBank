@@ -123,9 +123,9 @@ The application can also be run using Docker containers, which simplifies setup 
 The Docker setup uses the following environment variables (defined in docker-compose.yml):
 
 - Database configuration:
-  - `POSTGRES_DB`: Database name (default: eaglebank)
-  - `POSTGRES_USER`: Database username (default: eaglebank_user)
-  - `POSTGRES_PASSWORD`: Database password (default: eaglebank_password)
+  - `POSTGRES_DB`: Database name (default: EagleBank)
+  - `POSTGRES_USER`: Database username (default: shad)
+  - `POSTGRES_PASSWORD`: Database password (default: postgres)
 
 - Application configuration:
   - `SPRING_DATASOURCE_URL`: JDBC URL for database connection
