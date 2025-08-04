@@ -145,6 +145,7 @@ The API is documented using OpenAPI specification. The full specification can be
 - **Transactions**: `/v1/accounts/{accountNumber}/transactions`
 
 ## 💻 Usage Examples
+Postman can be used for testing this api. Simply import the postman collection and prefix the endpoints with http://localhost:8080
 
 ### Authentication
 
