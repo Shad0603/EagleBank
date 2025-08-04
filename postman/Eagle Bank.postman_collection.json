@@ -1,0 +1,379 @@
+{
+	"info": {
+		"_postman_id": "e5c21ac7-c102-499a-adfa-47fecf8e79f6",
+		"name": "Eagle Bank",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44024956",
+		"_collection_link": "https://shad-5254895.postman.co/workspace/Shad's-Workspace~215d725d-77fb-4ab2-8f2f-523a6ec4bc73/collection/44024956-e5c21ac7-c102-499a-adfa-47fecf8e79f6?action=share&source=collection_link&creator=44024956"
+	},
+	"item": [
+		{
+			"name": "Add User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Test User\",\r\n  \"address\": {\r\n    \"line1\": \"string\",\r\n    \"line2\": \"string\",\r\n    \"line3\": \"string\",\r\n    \"town\": \"string\",\r\n    \"county\": \"string\",\r\n    \"postcode\": \"string\"\r\n  },\r\n  \"phoneNumber\": \"string\",\r\n  \"email\": \"user@example.com\",\r\n  \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login and Token-gen",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"user@example.com\",\r\n  \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All Users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Authenticated User",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwidXNlcklkIjoiMWU0MWNiNzgtMzllYS00NWI4LWI4NzgtYTA1ZTI2NDU4YTUwIiwibmFtZSI6IlRlc3QgVXNlciIsImlhdCI6MTc1MzYyNDI4OCwiZXhwIjoxNzUzNjI3ODg4fQ.xroU4sNY55jynO31hqC0BKcfdsZPi_E0bydDB9bNVwU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"password\": \"newpassword\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/1e41cb78-39ea-45b8-b878-a05e26458a50",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"1e41cb78-39ea-45b8-b878-a05e26458a50"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Account",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwidXNlcklkIjoiMTRlMTQyMjYtZjA2My00Mzk1LWE1MWEtZTc5ZjVjODAzZjkxIiwibmFtZSI6IlRlc3QgVXNlciIsImlhdCI6MTc1MzYzNzE5OSwiZXhwIjoxNzUzNjQwNzk5fQ.Ssbm6OQPCcrzBP7UHAarAwgfdG1oK3x8AydKquYuNcY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"account\",\r\n  \"accountType\": \"PERSONAL\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Accounts",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwidXNlcklkIjoiMTRlMTQyMjYtZjA2My00Mzk1LWE1MWEtZTc5ZjVjODAzZjkxIiwibmFtZSI6IlRlc3QgVXNlciIsImlhdCI6MTc1MzYzNzE5OSwiZXhwIjoxNzUzNjQwNzk5fQ.Ssbm6OQPCcrzBP7UHAarAwgfdG1oK3x8AydKquYuNcY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Account Details",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwidXNlcklkIjoiMTRlMTQyMjYtZjA2My00Mzk1LWE1MWEtZTc5ZjVjODAzZjkxIiwibmFtZSI6IlRlc3QgVXNlciIsImlhdCI6MTc1MzYzNzE5OSwiZXhwIjoxNzUzNjQwNzk5fQ.Ssbm6OQPCcrzBP7UHAarAwgfdG1oK3x8AydKquYuNcY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Deposit",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwidXNlcklkIjoiMTRlMTQyMjYtZjA2My00Mzk1LWE1MWEtZTc5ZjVjODAzZjkxIiwibmFtZSI6IlRlc3QgVXNlciIsImlhdCI6MTc1MzYzNzE5OSwiZXhwIjoxNzUzNjQwNzk5fQ.Ssbm6OQPCcrzBP7UHAarAwgfdG1oK3x8AydKquYuNcY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"amount\": \"100\",\r\n  \"currency\": \"GBP\",\r\n  \"type\": \"deposit\",\r\n  \"reference\": \"first transaction\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/accounts/01440716/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"accounts",
+						"01440716",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Withdrawal",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwidXNlcklkIjoiMTRlMTQyMjYtZjA2My00Mzk1LWE1MWEtZTc5ZjVjODAzZjkxIiwibmFtZSI6IlRlc3QgVXNlciIsImlhdCI6MTc1MzYzNzE5OSwiZXhwIjoxNzUzNjQwNzk5fQ.Ssbm6OQPCcrzBP7UHAarAwgfdG1oK3x8AydKquYuNcY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"amount\": \"100\",\r\n  \"currency\": \"GBP\",\r\n  \"type\": \"withdrawal\",\r\n  \"reference\": \"first transaction\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/accounts/01440716/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"accounts",
+						"01440716",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
