@@ -6,7 +6,7 @@ services:
     container_name: eaglebank-db
     environment:
       POSTGRES_DB: EagleBank
-      POSTGRES_USER: shad
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,7 +25,9 @@ public class TransactionServiceTest {
     private TransactionService transactionService;
 
     private User user;
+    private User otherUser;
     private Account account;
+
 
     @BeforeEach
     void setUp() {
@@ -157,6 +160,39 @@ public class TransactionServiceTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> transactionService.createTransaction("01000001", req, user)
+        );
+    }
+
+    @Test
+    void testGetTransactionsByAccountId_OwnAccount_Success() {
+        // Arrange
+        Transaction tx = new Transaction();
+        tx.setId("tan-abc123");
+
+        List<Transaction> transactions = List.of(tx);
+
+        when(accountRepository.findByAccountNumber("123456789"))
+                .thenReturn(Optional.of(account));
+        when(transactionRepository.findByAccount_AccountNumber("123456789"))
+                .thenReturn(transactions);
+
+        // Act
+        List<Transaction> result = transactionService.getTransactionsByAccountId("123456789", user);
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals("tan-abc123", result.get(0).getId());
+    }
+
+    @Test
+    void testGetTransactionsByAccountId_AccountNotFound_ThrowsResourceNotFoundException() {
+        // Arrange
+        when(accountRepository.findByAccountNumber("123456789"))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () ->
+                transactionService.getTransactionsByAccountId("123456789", user)
         );
     }
 }

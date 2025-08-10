@@ -53,3 +53,4 @@ public class Transaction {
     public void setTimestamp(Instant timestamp) { this.timestamp = timestamp; }
     public void setAccount(Account account) { this.account = account; }
 }
+

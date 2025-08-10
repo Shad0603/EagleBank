@@ -53,7 +53,22 @@ src/
                 └── eaglebank/
                     └── service/        # Service tests
 ```
-
+## Endpoints
+### Authentication
+- `POST /v1/auth/login` - Login and receive JWT token
+### Users
+- `POST /v1/users` - Create a new user (no auth required)
+- `GET /v1/users/{userId}` - Get user details
+- `PATCH /v1/users/{userId}` - Update user details
+- `DELETE /v1/users/{userId}` - Delete user (only if no bank accounts associated with this user)
+### Bank Accounts
+- `POST /v1/accounts` - Create a new bank account
+- `GET /v1/accounts` - List user's bank accounts
+- `GET /v1/accounts/{accountNumber}` - Get account details
+- `PATCH /v1/accounts/{accountNumber}` - Update account details
+### Transactions
+- `POST /v1/accounts/{accountNumber}/transactions` - Create transaction (deposit/withdrawal)
+- `GET /v1/accounts/{accountNumber}/transactions` - List account transactions
 ## 🚀 Setup and Installation
 
 ### Prerequisites
@@ -231,10 +246,5 @@ The following features are planned for future implementation:
 
 - [ ]  **PATCH** **`/v1/accounts/{accountNumber}`** – Update own account details
 - [ ]  **DELETE** **`/v1/accounts/{accountNumber}`** – Delete own account
-- [ ]  **GET** **`/v1/accounts/{accountId}/transactions`** – List all transactions for account
 - [ ]  **GET** **`/v1/accounts/{accountId}/transactions/{transactionId}`** – Fetch specific transaction
 
-Additional improvements:
-- Comprehensive controller tests to ensure API contract compliance
-- Integration tests for end-to-end validation
-- Performance testing for high-load scenarios

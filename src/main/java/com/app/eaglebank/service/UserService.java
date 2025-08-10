@@ -37,6 +37,16 @@ public class UserService {
     }
 
     public User registerUser(User user) {
+        // Check if email already exists
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new BadRequestException("Email address is already registered");
+        }
+
+        // Check if phone number already exists
+        if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
+            throw new BadRequestException("Phone number is already registered");
+        }
+
         // Hash the password before saving for security
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
@@ -88,3 +98,4 @@ public class UserService {
         userRepository.delete(user);
     }
 }
+

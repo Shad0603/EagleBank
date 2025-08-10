@@ -39,8 +39,9 @@ public class AuthService {
             throw new RuntimeException("Invalid credentials");
         }
 
-        // Return the authenticated user object (can be used to generate a JWT)
+        // Return the authenticated user object
         return user;
     }
 
 }
+

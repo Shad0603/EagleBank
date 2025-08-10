@@ -2,6 +2,7 @@ package com.app.eaglebank.controller;
 
 import com.app.eaglebank.dto.requests.CreateTransactionRequest;
 import com.app.eaglebank.dto.responses.TransactionResponse;
+import com.app.eaglebank.exception.ResourceNotFoundException;
 import com.app.eaglebank.model.Transaction;
 import com.app.eaglebank.model.User;
 import com.app.eaglebank.service.TransactionService;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * REST controller for managing financial transactions in the Eagle Bank application.
@@ -39,6 +42,27 @@ public class TransactionController {
         Transaction txn = transactionService.createTransaction(accountNumber, request, authenticatedUser);
         TransactionResponse response = new TransactionResponse(txn);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TransactionResponse>> getTransactions(
+            @PathVariable String accountNumber,
+            @AuthenticationPrincipal User authenticatedUser
+    ) {
+        try {
+            List<Transaction> transactions = transactionService.getTransactionsByAccountId(accountNumber, authenticatedUser);
+            // Convert entities to detailed responses
+            List<TransactionResponse> response = transactions.stream()
+                    .map(TransactionResponse::new)
+                    .toList();
+
+            return ResponseEntity.ok(response);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
 
     }
 }

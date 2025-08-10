@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -89,5 +90,20 @@ public class TransactionService {
         accountRepository.save(account);
 
         return txn;
+    }
+
+    @Transactional
+    public List<Transaction> getTransactionsByAccountId(String accountNumber, User authenticatedUser) {
+        // Find the account
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
+
+        // Ownership check
+        if (!account.getUser().getId().equals(authenticatedUser.getId())) {
+            throw new SecurityException("Access denied");
+        }
+
+        // Fetch and return all transactions for this account
+        return transactionRepository.findByAccount_AccountNumber(accountNumber);
     }
 }
