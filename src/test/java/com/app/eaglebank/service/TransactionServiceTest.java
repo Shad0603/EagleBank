@@ -41,7 +41,7 @@ public class TransactionServiceTest {
         account = new Account();
         account.setUser(user);
         account.setAccountNumber("01000001");
-        account.setBalance(BigDecimal.valueOf(500));
+        account.setBalance(BigDecimal.valueOf(500)); // Set a default initial value of £500
     }
 
     @Test
