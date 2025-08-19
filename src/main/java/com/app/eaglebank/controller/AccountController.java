@@ -50,6 +50,7 @@ public class AccountController {
                 .body(new AccountResponse(account));
     }
 
+    // ADMIN ENDPOINT ONLY FOR TEST PURPOSES
     @GetMapping
     public ResponseEntity<List<AccountResponse>> getAllAccounts(
             @AuthenticationPrincipal UserDetails userDetails) {
